@@ -138,7 +138,8 @@ If the node object contain its children in a different property, you can set `Is
  <material:TreeView ItemsSource="{Binding Nodes}" IsLeafPropertyName="IsLeaf" />
 ```
 
-> Note: **Leaf** status is already managed by the TreeView. But when lazy-loading is used, TreeView can't know if the node is a leaf or not. So you should set `IsLeafPropertyName` to the name of the property that contains the state of the node.
+> [!NOTE]
+> **Leaf** status is already managed by the TreeView. But when lazy-loading is used, TreeView can't know if the node is a leaf or not. So you should set `IsLeafPropertyName` to the name of the property that contains the state of the node.
 
 ### ChildrenBinding
 If the node object contain its children in a different property, you can set `ChildrenBinding` property of the TreeView to the name of the property that contains the children. For example, if you have a `SubItems` property in your node object, you should set `ChildrenBinding` to `SubItems`:
@@ -228,7 +229,8 @@ You can customize the appearance of the TreeView with styles. You override the f
     </Style>
 ```
 
-> _**Note** that, Make sure `material` namespace of TreeView is added to your file, you can add `xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"`_
+> [!NOTE]
+> Make sure `material` namespace of TreeView is added to your file, you can add `xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"`
 
 
 ![MAUI TreeView Customizations](../../../../images/treeview-customizations.gif)
