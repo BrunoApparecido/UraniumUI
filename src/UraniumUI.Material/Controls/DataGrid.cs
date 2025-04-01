@@ -209,6 +209,7 @@ public partial class DataGrid : Border
             // TODO: Use an attribute to localize it.
             titleView.BindingContext = column;
             titleView.SetBinding(View.IsVisibleProperty, nameof(DataGridColumn.IsVisible));
+			titleView.SetBinding(View.WidthProperty, nameof(DataGridColumn.Width));
 
             _rootGrid.Add(titleView, column: i, row);
         }
@@ -293,7 +294,14 @@ public partial class DataGrid : Border
         _rootGrid.ColumnDefinitions.Clear();
         for (int i = 0; i < Columns.Count; i++)
         {
-            _rootGrid.AddColumnDefinition(new ColumnDefinition(Columns[i].Width));
+           // _rootGrid.AddColumnDefinition(new ColumnDefinition(Columns[i].Width));
+            var columnDefinition = new ColumnDefinition();
+    		// Set the binding
+    		columnDefinition.SetBinding(
+    			ColumnDefinition.WidthProperty,
+    			new Binding("ColumnWidth", source: Columns[i])); // Replace `viewModel` with your binding source
+    		_rootGrid.ColumnDefinitions.Add(columnDefinition);
+
         }
     }
 
