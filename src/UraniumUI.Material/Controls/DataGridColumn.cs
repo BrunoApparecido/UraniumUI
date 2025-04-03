@@ -28,8 +28,22 @@ public class DataGridColumn : BindableObject
     public BindingBase ValueBinding { get; set; }
 
     [TypeConverter(typeof(GridLengthTypeConverter))]
-    public GridLength Width { get; set; } = GridLength.Auto;
-
+    public GridLength Width
+	{
+		get => (GridLength) GetValue(WidthProperty); set => SetValue(WidthProperty, value);
+	}
+    public static readonly BindableProperty WidthProperty = BindableProperty.Create(
+	nameof(Width),
+	typeof(GridLength),
+	typeof(DataGridColumn),
+	GridLength.Auto,
+	propertyChanged: (bindable, oldValue, newValue) =>
+	{
+	    if (bindable is DataGridColumn column)
+	    {
+		    column.OnPropertyChanged(nameof(Width));
+	    }
+	});
     public bool IsVisible { get => (bool)GetValue(IsVisibleProperty); set => SetValue(IsVisibleProperty, value); }
 
     public static readonly BindableProperty IsVisibleProperty = BindableProperty.Create(

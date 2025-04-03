@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -209,6 +209,7 @@ public partial class DataGrid : Border
             // TODO: Use an attribute to localize it.
             titleView.BindingContext = column;
             titleView.SetBinding(View.IsVisibleProperty, nameof(DataGridColumn.IsVisible));
+			titleView.SetBinding(View.WidthProperty, nameof(DataGridColumn.Width));
 
             _rootGrid.Add(titleView, column: i, row);
         }
@@ -305,7 +306,7 @@ public partial class DataGrid : Border
     private void ConfigureGridRowDefinitions(int rows)
     {
         _rootGrid.RowDefinitions.Clear();
-        var actualRows = rows * 2 - 1;
+        var actualRows = (rows * 2) - 1;
 
         for (int i = 0; i < actualRows; i++)
         {
