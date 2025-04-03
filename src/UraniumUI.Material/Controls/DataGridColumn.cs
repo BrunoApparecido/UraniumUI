@@ -32,18 +32,17 @@ public class DataGridColumn : BindableObject
 	{
 		get => (GridLength) GetValue(WidthProperty); set => SetValue(WidthProperty, value);
 	}
-
-	public static readonly BindableProperty WidthProperty = BindableProperty.Create(
-		nameof(Width),
-		typeof(GridLength),
-		typeof(DataGridColumn),
-		GridLength.Auto,
-		propertyChanged: (bindable, oldValue, newValue) =>
-		{
-    if (bindable is DataGridColumn column)
-    {
-	    column.OnPropertyChanged(nameof(Width));
-    }
+    public static readonly BindableProperty WidthProperty = BindableProperty.Create(
+	nameof(Width),
+	typeof(GridLength),
+	typeof(DataGridColumn),
+	GridLength.Auto,
+	propertyChanged: (bindable, oldValue, newValue) =>
+	{
+	    if (bindable is DataGridColumn column)
+	    {
+		    column.OnPropertyChanged(nameof(Width));
+	    }
 	});
     public bool IsVisible { get => (bool)GetValue(IsVisibleProperty); set => SetValue(IsVisibleProperty, value); }
 
