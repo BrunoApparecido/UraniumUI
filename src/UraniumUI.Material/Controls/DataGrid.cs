@@ -293,7 +293,12 @@ public partial class DataGrid : Border
         _rootGrid.ColumnDefinitions.Clear();
         for (int i = 0; i < Columns.Count; i++)
         {
-            _rootGrid.AddColumnDefinition(new ColumnDefinition(Columns[i].Width));
+         	var columnDefinition = new ColumnDefinition();
+        	// Set the binding
+        	columnDefinition.SetBinding(
+        		ColumnDefinition.WidthProperty,
+        		new Binding("Width", source: Columns[i])); // Replace `viewModel` with your binding source
+        	_rootGrid.ColumnDefinitions.Add(columnDefinition);
         }
     }
 
