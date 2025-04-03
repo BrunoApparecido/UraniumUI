@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -301,14 +301,13 @@ public partial class DataGrid : Border
     			ColumnDefinition.WidthProperty,
     			new Binding("ColumnWidth", source: Columns[i])); // Replace `viewModel` with your binding source
     		_rootGrid.ColumnDefinitions.Add(columnDefinition);
-
         }
     }
 
     private void ConfigureGridRowDefinitions(int rows)
     {
         _rootGrid.RowDefinitions.Clear();
-        var actualRows = rows * 2 - 1;
+        var actualRows = (rows * 2) - 1;
 
         for (int i = 0; i < actualRows; i++)
         {
