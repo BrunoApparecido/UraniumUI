@@ -16,7 +16,7 @@ public partial class TextField
         typeof(TextField),
         string.Empty,
         BindingMode.TwoWay,
-        propertyChanging: (bindable, oldValue, newValue) =>
+        propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as TextField).UpdateClearIconState();
         });

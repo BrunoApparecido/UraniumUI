@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls;
 using Plainer.Maui.Controls;
 using System.Windows.Input;
 using UraniumUI.Converters;
@@ -167,7 +168,7 @@ public partial class TextField : InputField
         {
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.End,
-            IsVisible = false,
+            IsVisible = true, // this is important; having initial state of false will have SetBinding have no effect, since it will not receive input events
             Padding = new Thickness(5, 0),
             Margin = new Thickness(0, 0, 5, 0),
             TappedCommand = new Command(OnClearTapped),
@@ -178,12 +179,14 @@ public partial class TextField : InputField
                 Fill = ColorResource.GetColor("OnBackground", "OnBackgroundDark", Colors.DarkGray).WithAlpha(.5f),
             }
         };
+
         contentView.SetId("ClearIcon");
         contentView.SetBinding(StatefulContentView.IsFocusableProperty, new Binding(nameof(DisallowClearButtonFocus), source: this));
-        contentView.SetBinding(StatefulContentView.IsVisibleProperty, new Binding(nameof(Text), converter: UraniumConverters.StringIsNotNullOrEmptyConverter, source: this));
+        contentView.SetBinding(IsVisibleProperty, new Binding(nameof(Text), converter: UraniumConverters.StringIsNotNullOrEmptyConverter, source: this));
+
         return contentView;
     }
-
+  
     /// <summary>
     /// Input has be be already focused when this method is called.
     /// </summary>
