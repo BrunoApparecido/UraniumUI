@@ -41,7 +41,19 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
     protected virtual void ApplyHierarchicalSelection(CheckBox checkBox)
     {
         var holder = checkBox.FindInParents<TreeViewNodeHolderView>() ?? throw new InvalidOperationException("CheckBox isn't in a TreeView ItemTemplate");
-        foreach (TreeViewNodeHolderView child in holder.NodeChildren.Where(x => x is TreeViewNodeHolderView))
+
+        // 👇 Ensure the node is expanded so children are created
+        if (!holder.IsExpanded && !holder.IsLeaf)
+        {
+            holder.IsExpanded = true;
+        }
+
+        var allChildren = holder.TreeView
+        .GetChildViewsOf(holder);
+        //.FindManyInChildrenHierarchy<TreeViewNodeHolderView>().ToList();
+        //.Where(x => x.ParentHolderView == holder);
+
+        foreach (var child in allChildren)
         {
             var childCheckBox = FindCheckBox(child);
             if (childCheckBox.IsChecked != checkBox.IsChecked)
@@ -75,15 +87,20 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
             mainCheckBox.IconGeometry = InputKit.Shared.Controls.PredefinedShapes.Check;
         }
 
-        if (holder.NodeChildren.Count > 0)
-        {
-            var children = holder.NodeChildren.OfType<TreeViewNodeHolderView>();
+        var children = holder.TreeView
+             .GetChildViewsOf(holder)
+        //.FindManyInChildrenHierarchy<TreeViewNodeHolderView>()
+        //.Where(x => x.ParentHolderView == holder)
+        .ToList();
 
-            var lastItemToCheck = FindCheckBox(children.FirstOrDefault())?.IsChecked ?? throw new InvalidOperationException("CheckBox isn't in a TreeView ItemTemplate");
-            foreach (TreeViewNodeHolderView child in holder.NodeChildren.Where(x => x is TreeViewNodeHolderView))
+        if (children.Count > 0)
+        {
+            var firstCheck = FindCheckBox(children[0])?.IsChecked ?? false;
+
+            foreach (var child in children)
             {
-                var checkBox = FindCheckBox(child);
-                if (lastItemToCheck != checkBox.IsChecked)
+                var check = FindCheckBox(child);
+                if (check.IsChecked != firstCheck)
                 {
                     mainCheckBox.IconGeometry = InputKit.Shared.Controls.PredefinedShapes.Line;
                     if (!mainCheckBox.IsChecked)
@@ -94,11 +111,13 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
                     return;
                 }
             }
-            if (mainCheckBox.IsChecked != lastItemToCheck)
+
+            if (mainCheckBox.IsChecked != firstCheck)
             {
-                mainCheckBox.IsChecked = lastItemToCheck;
+                mainCheckBox.IsChecked = firstCheck;
             }
         }
+
         CheckStateItself(holder.ParentHolderView);
     }
 
