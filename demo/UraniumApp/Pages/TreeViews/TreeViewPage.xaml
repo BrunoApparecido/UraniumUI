@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage x:Class="UraniumApp.Pages.TreeViews.TreeViewPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-             xmlns:vm="clr-namespace:UraniumApp.ViewModels"
-             xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
-             xmlns:root="clr-namespace:UraniumApp"
-             xmlns:local="clr-namespace:UraniumApp.Pages">
+<ContentPage
+    x:Class="UraniumApp.Pages.TreeViews.TreeViewPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:UraniumApp.Pages"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:root="clr-namespace:UraniumApp"
+    xmlns:vm="clr-namespace:UraniumApp.ViewModels">
     <ContentPage.BindingContext>
         <vm:TreeViewPageViewModel />
     </ContentPage.BindingContext>
@@ -17,7 +18,11 @@
                 <material:TabItem Title="Simple">
                     <material:TabItem.ContentTemplate>
                         <DataTemplate>
-                            <material:TreeView SelectionMode="Multiple" ItemsSource="{Binding Nodes}" IsExpandedPropertyName="IsExtended"/>
+                            <material:TreeView
+                                IsExpandedPropertyName="IsExtended"
+                                IsLeafPropertyName="IsLeaf"
+                                ItemsSource="{Binding Nodes}"
+                                SelectionMode="Multiple" />
                         </DataTemplate>
                     </material:TabItem.ContentTemplate>
                 </material:TabItem>
@@ -25,12 +30,18 @@
                 <material:TabItem Title="Templated">
                     <material:TabItem.ContentTemplate>
                         <DataTemplate>
-                            <material:TreeView ItemsSource="{Binding Nodes}">
+                            <material:TreeView
+                                IsExpandedPropertyName="IsExtended"
+                                IsLeafPropertyName="IsLeaf"
+                                ItemsSource="{Binding Nodes}">
                                 <material:TreeView.ItemTemplate>
                                     <DataTemplate>
-                                        <HorizontalStackLayout Margin="0,12" Spacing="5" VerticalOptions="Center">
+                                        <HorizontalStackLayout
+                                            Margin="0,12"
+                                            Spacing="5"
+                                            VerticalOptions="Center">
                                             <Image Source="{FontImageSource FontFamily=MaterialSharp, Glyph={x:Static m:MaterialSharp.Folder}, Color={AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}}" />
-                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <Label FontAttributes="Bold" Text="{Binding Name}" />
                                             <Label Text="{Binding Children.Count, StringFormat='({0})'}" />
                                         </HorizontalStackLayout>
                                     </DataTemplate>
@@ -43,14 +54,20 @@
                 <material:TabItem Title="Template selector">
                     <material:TabItem.ContentTemplate>
                         <DataTemplate>
-                            <material:TreeView ItemsSource="{Binding Nodes}">
+                            <material:TreeView
+                                IsExpandedPropertyName="IsExtended"
+                                IsLeafPropertyName="IsLeaf"
+                                ItemsSource="{Binding Nodes}">
                                 <material:TreeView.ItemTemplate>
                                     <vm:MyTemplateSelector>
                                         <vm:MyTemplateSelector.TemplateDefault>
                                             <DataTemplate>
-                                                <HorizontalStackLayout Margin="0,8" Spacing="5" VerticalOptions="Center">
+                                                <HorizontalStackLayout
+                                                    Margin="0,8"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
                                                     <Image Source="{FontImageSource FontFamily=MaterialSharp, Glyph={x:Static m:MaterialSharp.Folder}, Color={AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}}" />
-                                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                    <Label FontAttributes="Bold" Text="{Binding Name}" />
                                                     <Label Text="{Binding Children.Count, StringFormat='({0})'}" />
                                                     <Label Text="Default Template" />
                                                 </HorizontalStackLayout>
@@ -58,9 +75,12 @@
                                         </vm:MyTemplateSelector.TemplateDefault>
                                         <vm:MyTemplateSelector.TemplateA>
                                             <DataTemplate>
-                                                <HorizontalStackLayout Margin="0,8" Spacing="5" VerticalOptions="Center">
+                                                <HorizontalStackLayout
+                                                    Margin="0,8"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
                                                     <Image Source="{FontImageSource FontFamily=MaterialSharp, Glyph={x:Static m:MaterialSharp.Folder}, Color={AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource TertiaryDark}}}" />
-                                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                    <Label FontAttributes="Bold" Text="{Binding Name}" />
                                                     <Label Text="{Binding Children.Count, StringFormat='({0})'}" />
                                                     <Label Text="Template for A" />
                                                 </HorizontalStackLayout>
@@ -68,9 +88,12 @@
                                         </vm:MyTemplateSelector.TemplateA>
                                         <vm:MyTemplateSelector.TemplateB>
                                             <DataTemplate>
-                                                <HorizontalStackLayout Margin="0,8" Spacing="5" VerticalOptions="Center">
+                                                <HorizontalStackLayout
+                                                    Margin="0,8"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
                                                     <Image Source="{FontImageSource FontFamily=MaterialSharp, Glyph={x:Static m:MaterialSharp.Folder}, Color={AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}}" />
-                                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                    <Label FontAttributes="Bold" Text="{Binding Name}" />
                                                     <Label Text="{Binding Children.Count, StringFormat='({0})'}" />
                                                     <Label Text="Template for B" />
                                                 </HorizontalStackLayout>
@@ -78,9 +101,12 @@
                                         </vm:MyTemplateSelector.TemplateB>
                                         <vm:MyTemplateSelector.TemplateC>
                                             <DataTemplate>
-                                                <HorizontalStackLayout Margin="0,8" Spacing="5" VerticalOptions="Center">
+                                                <HorizontalStackLayout
+                                                    Margin="0,8"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
                                                     <Image Source="{FontImageSource FontFamily=MaterialSharp, Glyph={x:Static m:MaterialSharp.Folder}, Color={AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}}" />
-                                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                    <Label FontAttributes="Bold" Text="{Binding Name}" />
                                                     <Label Text="{Binding Children.Count, StringFormat='({0})'}" />
                                                     <Label Text="Template for C" />
                                                 </HorizontalStackLayout>
@@ -96,7 +122,10 @@
                 <material:TabItem Title="Expander">
                     <material:TabItem.ContentTemplate>
                         <DataTemplate>
-                            <material:TreeView ItemsSource="{Binding Nodes}" IsExpandedPropertyName="IsExtended">
+                            <material:TreeView
+                                IsExpandedPropertyName="IsExtended"
+                                IsLeafPropertyName="IsLeaf"
+                                ItemsSource="{Binding Nodes}">
                                 <material:TreeView.ExpanderTemplate>
                                     <DataTemplate>
                                         <StackLayout WidthRequest="50">
@@ -112,10 +141,13 @@
                 <material:TabItem Title="Selection">
                     <material:TabItem.ContentTemplate>
                         <DataTemplate>
-                            <material:TreeView ItemsSource="{Binding Nodes}" IsExpandedPropertyName="IsExtended">
+                            <material:TreeView
+                                IsExpandedPropertyName="IsExtended"
+                                IsLeafPropertyName="IsLeaf"
+                                ItemsSource="{Binding Nodes}">
                                 <material:TreeView.ItemTemplate>
                                     <DataTemplate>
-                                        <material:CheckBox Text="{Binding Name}" Margin="10">
+                                        <material:CheckBox Margin="10" Text="{Binding Name}">
                                             <material:CheckBox.Behaviors>
                                                 <material:TreeViewHierarchicalSelectBehavior />
                                             </material:CheckBox.Behaviors>
