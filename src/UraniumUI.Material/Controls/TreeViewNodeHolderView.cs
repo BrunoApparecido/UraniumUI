@@ -98,8 +98,6 @@ public class TreeViewNodeHolderView : VerticalStackLayout
             CreateChildContainer(binding);
         }
         ChildrenBinding = childrenBinding;
-
-
     }
 
     protected virtual View InitializeArrowExpander()
