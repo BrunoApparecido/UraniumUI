@@ -15,24 +15,21 @@ public partial class TreeView : ContentView
         return label;
     });
 
-    private readonly List<TreeViewNodeHolderView> _registeredNodes = new();
-
-    internal void RegisterNode(TreeViewNodeHolderView node)
-    {
-        _registeredNodes.Add(node);
-    }
-
-    internal IEnumerable<TreeViewNodeHolderView> GetChildViewsOf(TreeViewNodeHolderView parent)
-    {
-        return _registeredNodes.Where(x => x.ParentHolderView == parent);
-    }
-
-    public IEnumerable<TreeViewNodeHolderView> AllNodeViews => _registeredNodes;
-
+    private readonly List<TreeViewNodeHolderView> registeredNodes = new();
+    public IEnumerable<TreeViewNodeHolderView> AllNodeViews => registeredNodes;
     private readonly CollectionView rootView;
     private bool isTemplateUpdating;
     private DataTemplate nodeTemplate;
 
+    internal void RegisterNode(TreeViewNodeHolderView node)
+    {
+        registeredNodes.Add(node);
+    }
+
+    internal IEnumerable<TreeViewNodeHolderView> GetChildViewsOf(TreeViewNodeHolderView parent)
+    {
+        return registeredNodes.Where(x => x.ParentHolderView == parent);
+    }
 
     public TreeView()
     {
@@ -48,7 +45,7 @@ public partial class TreeView : ContentView
     }
 
     private List<TreeViewNodeHolderView> GetChildViews() =>
-        _registeredNodes.ToList();
+        registeredNodes.ToList();
 
     protected override void OnHandlerChanged()
     {
@@ -156,7 +153,7 @@ public partial class TreeView : ContentView
         if (newValue is INotifyCollectionChanged observableNew)
             observableNew.CollectionChanged += SelectedItemsChanged;
 
-        foreach (TreeViewNodeHolderView childNode in _registeredNodes)
+        foreach (TreeViewNodeHolderView childNode in registeredNodes)
         {
             if (newValue.Contains(childNode.BindingContext) && !childNode.IsSelected)
             {
@@ -171,7 +168,7 @@ public partial class TreeView : ContentView
         {
             foreach (var item in e.NewItems)
             {
-                var node = _registeredNodes
+                var node = registeredNodes
                     .FirstOrDefault(x => x.BindingContext == item);
                 if (node != null && !node.IsSelected)
                     node.IsSelected = true;
@@ -181,7 +178,7 @@ public partial class TreeView : ContentView
         {
             foreach (var item in e.OldItems)
             {
-                var node = _registeredNodes
+                var node = registeredNodes
                     .FirstOrDefault(x => x.BindingContext == item);
                 if (node != null && node.IsSelected)
                     node.IsSelected = false;
