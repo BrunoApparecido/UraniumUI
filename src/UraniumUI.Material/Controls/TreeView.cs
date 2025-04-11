@@ -17,6 +17,7 @@ public partial class TreeView : ContentView
 
     private readonly List<TreeViewNodeHolderView> registeredNodes = new();
     public IEnumerable<TreeViewNodeHolderView> AllNodeViews => registeredNodes;
+    private List<TreeViewNodeHolderView> GetChildViews() => registeredNodes.ToList();
     private readonly CollectionView rootView;
     private bool isTemplateUpdating;
     private DataTemplate nodeTemplate;
@@ -43,9 +44,6 @@ public partial class TreeView : ContentView
 
         OnItemTemplateChanged(DefaultItemTemplate);
     }
-
-    private List<TreeViewNodeHolderView> GetChildViews() =>
-        registeredNodes.ToList();
 
     protected override void OnHandlerChanged()
     {
