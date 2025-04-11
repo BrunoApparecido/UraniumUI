@@ -50,8 +50,6 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
 
         var allChildren = holder.TreeView
         .GetChildViewsOf(holder);
-        //.FindManyInChildrenHierarchy<TreeViewNodeHolderView>().ToList();
-        //.Where(x => x.ParentHolderView == holder);
 
         foreach (var child in allChildren)
         {
@@ -89,8 +87,6 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
 
         var children = holder.TreeView
              .GetChildViewsOf(holder)
-        //.FindManyInChildrenHierarchy<TreeViewNodeHolderView>()
-        //.Where(x => x.ParentHolderView == holder)
         .ToList();
 
         if (children.Count > 0)
