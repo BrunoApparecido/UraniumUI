@@ -95,8 +95,8 @@ public class TreeViewHierarchicalSelectBehavior : Behavior<CheckBox>
 
             foreach (var child in children)
             {
-                var check = FindCheckBox(child);
-                if (check.IsChecked != firstCheck)
+                var checkBox = FindCheckBox(child);
+                if (checkBox.IsChecked != firstCheck)
                 {
                     mainCheckBox.IconGeometry = InputKit.Shared.Controls.PredefinedShapes.Line;
                     if (!mainCheckBox.IsChecked)
