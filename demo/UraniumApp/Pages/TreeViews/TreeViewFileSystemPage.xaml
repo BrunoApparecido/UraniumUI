@@ -18,6 +18,7 @@
 
                 <material:TreeView
                     x:Name="treeView"
+                    IsExpandedPropertyName="IsExtended"
                     IsLeafPropertyName="IsLeaf"
                     ItemsSource="{Binding Nodes}"
                     LoadChildrenCommand="{Binding LoadChildrenCommand}"

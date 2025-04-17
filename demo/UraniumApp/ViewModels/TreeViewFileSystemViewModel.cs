@@ -61,6 +61,7 @@ public class TreeViewFileSystemViewModel : UraniumBindableObject
                 Path = d,
                 IsDirectory = true,
                 IsLeaf = false,
+                IsExtended = false,
             };
         }
         var files = Directory.GetFiles(dir);
@@ -73,6 +74,7 @@ public class TreeViewFileSystemViewModel : UraniumBindableObject
                 Path = f,
                 IsDirectory = false,
                 IsLeaf = true,
+                IsExtended = true,
             };
             yield return node;
         }
@@ -81,11 +83,13 @@ public class TreeViewFileSystemViewModel : UraniumBindableObject
     public class NodeItem : UraniumBindableObject
     {
         private bool isLeaf;
+        private bool isExtended;
 
         public string Name { get; set; }
         public string Path { get; set; }
         public bool IsDirectory { get; set; }
-        public bool IsLeaf { get => isLeaf; set => SetProperty(ref isLeaf, value); }
-        public ObservableCollection<NodeItem> Children { get; } = new();
+        public virtual bool IsLeaf { get => isLeaf; set => SetProperty(ref isLeaf, value); }
+        public virtual bool IsExtended { get => isExtended; set => SetProperty(ref isExtended, value); }
+        public virtual IList<NodeItem> Children { get; set; } = new ObservableCollection<NodeItem>();
     }
 }
