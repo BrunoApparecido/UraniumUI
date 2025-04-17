@@ -220,7 +220,7 @@ public class TreeViewNodeHolderView : VerticalStackLayout
         if (!string.IsNullOrEmpty(TreeView.IsExpandedPropertyName))
         {
             this.SetBinding(IsExpandedProperty, new Binding(TreeView.IsExpandedPropertyName, BindingMode.TwoWay));
-    }
+        }
 
         if (!string.IsNullOrEmpty(TreeView.IsLeafPropertyName))
         {
@@ -434,10 +434,18 @@ public class TreeViewNodeHolderView : VerticalStackLayout
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    nodeChildren.SetBinding(CollectionView.ItemsSourceProperty, new Binding(binding.Path));
+                    if (nodeChildren == null)
+                    {
+                        CreateChildContainer(binding);
+                    }
+
+                    if (nodeChildren.ItemsSource is IEnumerable items && !items.Cast<object>().Any())
+                    {
+                        LoadChildrenIfNecessary();
+                    }
+
                     this.InvalidateMeasure();
                 });
-                LoadChildrenIfNecessary();
             }
 
             if (TreeView.UseAnimation)
@@ -485,7 +493,7 @@ public class TreeViewNodeHolderView : VerticalStackLayout
 
     protected virtual void LoadChildrenIfNecessary()
     {
-        if (!IsLeaf && !hasLoadedChildren && NodeChildren.ItemsSource is IEnumerable items && !items.Cast<object>().Any())
+        if (!IsLeaf && !hasLoadedChildren && (NodeChildren == null || NodeChildren.ItemsSource is IEnumerable items && !items.Cast<object>().Any()))
         {
             TreeView.LoadChildrenCommand?.Execute(BindingContext);
             hasLoadedChildren = true;
