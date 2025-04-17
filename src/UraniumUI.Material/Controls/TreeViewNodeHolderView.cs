@@ -217,6 +217,15 @@ public class TreeViewNodeHolderView : VerticalStackLayout
                 OnIsExpandedChanged(true);
             }
         }
+        if (!string.IsNullOrEmpty(TreeView.IsExpandedPropertyName))
+        {
+            this.SetBinding(IsExpandedProperty, new Binding(TreeView.IsExpandedPropertyName, BindingMode.TwoWay));
+    }
+
+        if (!string.IsNullOrEmpty(TreeView.IsLeafPropertyName))
+        {
+            this.SetBinding(IsLeafProperty, new Binding(TreeView.IsLeafPropertyName, BindingMode.TwoWay));
+        }
     }
     private void CreateChildContainer(Binding binding)
     {
