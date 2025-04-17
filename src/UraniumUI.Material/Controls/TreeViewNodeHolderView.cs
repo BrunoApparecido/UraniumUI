@@ -208,7 +208,7 @@ public class TreeViewNodeHolderView : VerticalStackLayout
         if (nodeChildren == null && ChildrenBinding is Binding binding &&
         !string.IsNullOrEmpty(binding.Path) &&
         TryGetInitialChildren(binding.Path, out var children) &&
-        children?.Cast<object>().Any())
+        (children?.Cast<object>().Any() ?? false))
         {
             CreateChildContainer(binding);
             // 🔥 Now that nodeChildren is created, we can safely expand
