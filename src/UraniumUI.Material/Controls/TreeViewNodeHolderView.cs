@@ -538,8 +538,11 @@ public class TreeViewNodeHolderView : VerticalStackLayout
                 return true;
             }
         }
-        catch { }
-
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in TryGetInitialChildren: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+        }
         return false;
     }
 }
