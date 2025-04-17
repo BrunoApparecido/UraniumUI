@@ -63,7 +63,8 @@ public class TreeViewNodeHolderView : VerticalStackLayout
 
     public TreeViewNodeHolderView(DataTemplate dataTemplate, TreeView treeView, BindingBase childrenBinding, int indentLevel = 0)
     {
-        if (indentLevel > 20) return; // prevent runaway recursion
+        if (indentLevel > 20) 
+            throw new ArgumentException("Indent level exceeds the maximum allowed value of 20, which may indicate runaway recursion.", nameof(indentLevel));
 
         TreeView = treeView ?? throw new ArgumentNullException(nameof(treeView));
         treeView.RegisterNode(this);
