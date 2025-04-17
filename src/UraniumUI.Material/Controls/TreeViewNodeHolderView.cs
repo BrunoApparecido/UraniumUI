@@ -247,15 +247,6 @@ public class TreeViewNodeHolderView : VerticalStackLayout
         childContainer.Children.Add(nodeChildren);
         this.Add(childContainer);
 
-        if (!string.IsNullOrEmpty(TreeView.IsExpandedPropertyName))
-        {
-            this.SetBinding(IsExpandedProperty, new Binding(TreeView.IsExpandedPropertyName, BindingMode.TwoWay));
-        }
-
-        if (!string.IsNullOrEmpty(TreeView.IsLeafPropertyName))
-        {
-            this.SetBinding(IsLeafProperty, new Binding(TreeView.IsLeafPropertyName, BindingMode.TwoWay));
-        }
 
         nodeChildren.ItemTemplate = new DataTemplate(() =>
         {
