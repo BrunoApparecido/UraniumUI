@@ -94,7 +94,9 @@ public class TreeViewNodeHolderView : VerticalStackLayout
         };
 
         this.Add(button);
-        if (childrenBinding is Binding binding && !string.IsNullOrEmpty(binding.Path) && TryGetInitialChildren(binding.Path, out var children) && children?.Cast<object>().Any() == true)
+        if (childrenBinding is Binding binding && !string.IsNullOrEmpty(binding.Path) &&
+            TryGetInitialChildren(binding.Path, out var children) && 
+            children is IEnumerable enumerable && enumerable.Cast<object>().Any())
         {
             CreateChildContainer(binding);
         }
@@ -208,7 +210,7 @@ public class TreeViewNodeHolderView : VerticalStackLayout
         if (nodeChildren == null && ChildrenBinding is Binding binding &&
         !string.IsNullOrEmpty(binding.Path) &&
         TryGetInitialChildren(binding.Path, out var children) &&
-        children?.Cast<object>().Any())
+        children is IEnumerable enumerable && enumerable.Cast<object>().Any())
         {
             CreateChildContainer(binding);
             // 🔥 Now that nodeChildren is created, we can safely expand
