@@ -493,7 +493,7 @@ public class TreeViewNodeHolderView : VerticalStackLayout
 
     protected virtual void LoadChildrenIfNecessary()
     {
-        if (!IsLeaf && !hasLoadedChildren && (NodeChildren == null || NodeChildren.ItemsSource is IEnumerable items && !items.Cast<object>().Any()))
+        if (!IsLeaf && !hasLoadedChildren && (NodeChildren == null || (NodeChildren.ItemsSource is IEnumerable items && !items.Cast<object>().Any())))
         {
             TreeView.LoadChildrenCommand?.Execute(BindingContext);
             hasLoadedChildren = true;
