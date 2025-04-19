@@ -136,7 +136,7 @@ public partial class DataGrid : Border
             Columns = CurrentType?.GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Select(s => new DataGridColumn
                 {
-                    Title = s.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? s.Name,
+                    Title = s.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? s.GetCustomAttribute<DisplayAttribute>()?.Name ?? s.Name,
                     ValueBinding = new Binding(s.Name),
                 }).ToList();
 
