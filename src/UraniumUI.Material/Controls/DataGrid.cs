@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using UraniumUI.Extensions;
 
@@ -136,7 +137,7 @@ public partial class DataGrid : Border
             Columns = CurrentType?.GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Select(s => new DataGridColumn
                 {
-                    Title = s.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? s.Name,
+                    Title = s.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? s.GetCustomAttribute<DisplayAttribute>()?.Name ?? s.Name,
                     ValueBinding = new Binding(s.Name),
                 }).ToList();
 
