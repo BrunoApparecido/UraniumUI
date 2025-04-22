@@ -4,6 +4,8 @@ using Shouldly;
 using System.Windows.Input;
 using UraniumUI.Material.Controls;
 using UraniumUI.Tests.Core;
+using UraniumUI.ViewExtensions;
+using UraniumUI.Views;
 
 namespace UraniumUI.Material.Tests.Controls;
 public class TextField_Test
@@ -40,23 +42,23 @@ public class TextField_Test
         control.Text.ShouldBe(viewModel.Text);
     }
 
-	[Fact]
-	public void Text_Binding_RaisesPropertyChangedEvent_ExactlyOnce()
-	{
-		var control = AnimationReadyHandler.Prepare(new TextField());
-		var viewModel = new TestViewModel { Text = "Text Initial Value" };
-		control.BindingContext = viewModel;
-		control.SetBinding(TextField.TextProperty, new Binding(nameof(TestViewModel.Text)));
+    [Fact]
+    public void Text_Binding_RaisesPropertyChangedEvent_ExactlyOnce()
+    {
+        var control = AnimationReadyHandler.Prepare(new TextField());
+        var viewModel = new TestViewModel { Text = "Text Initial Value" };
+        control.BindingContext = viewModel;
+        control.SetBinding(TextField.TextProperty, new Binding(nameof(TestViewModel.Text)));
 
-		var monitoredSubject = control.Monitor();
-		// Act
-		viewModel.Text = "Changed Value";
+        var monitoredSubject = control.Monitor();
+        // Act
+        viewModel.Text = "Changed Value";
 
-		// Assert
-		monitoredSubject.Should().RaisePropertyChangeFor(x => x.Text).ShouldHaveSingleItem();
-	}
+        // Assert
+        monitoredSubject.Should().RaisePropertyChangeFor(x => x.Text).ShouldHaveSingleItem();
+    }
 
-	[Fact]
+    [Fact]
     public void Text_Binding_ToSource()
     {
         var control = AnimationReadyHandler.Prepare(new TextField());
@@ -89,6 +91,23 @@ public class TextField_Test
 
         // Assert
         control.Text.ShouldBe(control.EntryView.Text);
+    }
+
+    [Fact]
+    public void TextChanges_ShouldShouldCorrectlyUpdateClearButtonVisibility()
+    {
+        var control = AnimationReadyHandler.Prepare(new TextField() { AllowClear = true });
+        // Currently no easier way provided by TextField/InputField to access this control
+        var clearIcon = control.FindByViewQueryIdInVisualTreeDescendants<StatefulContentView>("ClearIcon");
+
+        // Since we initialized with AllowClear = true
+        clearIcon.Should().NotBeNull();
+        // TextField initialized without text -> clear icon should be initially hidden
+        clearIcon.IsVisible.ShouldBeFalse();
+        control.Text = "Test";
+        clearIcon.IsVisible.ShouldBeTrue();
+        control.Text = "";
+        clearIcon.IsVisible.ShouldBeFalse();
     }
 
     [Fact]
