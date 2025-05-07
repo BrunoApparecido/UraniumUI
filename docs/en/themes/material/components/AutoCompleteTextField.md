@@ -1,5 +1,5 @@
 # AutoCompleteTextField
-AutoCompleteTextField is a text field that provides suggestions as you type.
+AutoCompleteTextField is a text field that provides suggestions as you type. It's a powerful input control that helps users quickly find and select items from a predefined list.
 
 ## Usage
 AutoCompleteTextField is included in the `UraniumUI.Material.Controls` namespace. You should add it to your XAML like this:
@@ -46,12 +46,22 @@ Then you can use it in a page like this:
 | --- | --- |
 | ![MAUI AutoComplete Entry](../../../../images/autocompletetextfield-demo-android-light.gif) | ![MAUI AutoComplete Entry](../../../../images/autocompletetextfield-demo-android-dark.gif) |
 
+## Properties
 
-## Icon
+### Basic Properties
+- `Title` (string): The label text displayed above the text field
+- `Text` (string): The current text value of the field
+- `SelectedText` (string): The text value when an item is selected from suggestions
+- `ItemsSource` (IList<string>): The collection of items to show as suggestions
+- `Threshold` (int): Minimum number of characters to type before showing suggestions (default: 2)
+- `TextColor` (Color): The color of the input text
+- `AllowClear` (bool): Whether to show a clear button when text is entered (default: false)
+
+### Icon
 AutoCompleteTextFields support setting an icon on the left side of the control. You can set the icon by setting the `Icon` property. The icon can be any `ImageSource` object. FontImageSource is recommended as Icon since its color can be changed when focused.
 
 ```xml
- <material:AutoCompleteTextField
+<material:AutoCompleteTextField
     Title="Fruit"
     Icon="{FontImageSource FontFamily=MaterialRegular, Glyph={x:Static m:MaterialRegular.Forest}}"/>
 ```
@@ -60,7 +70,6 @@ AutoCompleteTextFields support setting an icon on the left side of the control. 
 
 ## Validation
 Validation logic is exactly same with [InputKit Validations](https://enisn-projects.io/docs/en/inputkit/latest/components/controls/FormView#validations).
-
 
 AutoCompleteTextFields support validation. You can define validations by using the `Validations` property. Validation is triggered when the text changes. If the validation fails, the error message is displayed. You can set the error message by setting the `ErrorMessage` property.
 
@@ -75,10 +84,8 @@ AutoCompleteTextFields support validation. You can define validations by using t
 ### FormView Compatibility
 AutoCompleteTextField is fully compatible with [FormView](https://enisn-projects.io/docs/en/inputkit/latest/components/controls/FormView). You can use it inside a FormView and it will work as expected.
 
-
 ```xml
 <input:FormView Spacing="20">
-
     <material:AutoCompleteTextField 
         Title="Fruit" 
         Text="{Binding FruitText}"
@@ -91,6 +98,45 @@ AutoCompleteTextField is fully compatible with [FormView](https://enisn-projects
     <Button StyleClass="FilledButton"
             Text="Submit"
             input:FormView.IsSubmitButton="True"/>
-
 </input:FormView>
 ```
+
+## Dynamic Suggestions Example
+You can also bind to a dynamic source of suggestions. Here's an example using Google's search suggestions:
+
+```xml
+<material:AutoCompleteTextField
+    Title="Search"
+    AllowClear="true"
+    ItemsSource="{Binding Suggestions}"
+    Text="{Binding SearchText}" />
+```
+
+```csharp
+public class SearchViewModel : UraniumBindableObject
+{
+    private string searchText;
+    public string SearchText 
+    { 
+        get => searchText; 
+        set => SetProperty(ref searchText, value, doAfter: UpdateSuggestions); 
+    }
+
+    private IEnumerable<string> suggestions;
+    public IEnumerable<string> Suggestions 
+    { 
+        get => suggestions; 
+        set => SetProperty(ref suggestions, value); 
+    }
+    
+    private async void UpdateSuggestions(string value)
+    {
+        // Update suggestions based on the search text
+        Suggestions = await GetSuggestionsAsync(value);
+    }
+}
+```
+
+## Events
+- `TextChanged`: Raised when the text value changes
+- `Completed`: Raised when the user completes the input (e.g., presses Enter)

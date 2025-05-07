@@ -299,8 +299,7 @@ public class MainViewModel
 
 ![MAUI DataGrid Selection Deletion](../../../../images/datagrid-selection-deletion.gif)
 
-## Tips
-
+## Loading State
 You can place an activity indicator inside the DataGrid to show loading state if you make a network call to get data.
 
 ```xml
@@ -310,9 +309,46 @@ You can place an activity indicator inside the DataGrid to show loading state if
 ```
 
 ![MAUI DataGrid Loading](../../../../images/datagrid-tips-indicator.gif)
-### DataGridColumn
-`DataGridColumn` is a class that is used to define a column of **DataGrid**. It has the following properties:
 
-- `Title`: It's used in header of the column.
-- `CellItemTemplate`: It's used to define the template of the cell item of the column.
-- `Binding`: It's used to define the binding of the cell item of the column.
+## Column Visibility
+You can control the visibility of columns using the `IsVisible` property of `DataGridColumn`. This is useful for dynamically showing/hiding columns based on certain conditions.
+
+```xml
+<material:DataGrid ItemsSource="{Binding Items}">
+	<material:DataGrid.Columns>
+		<material:DataGridColumn ValueBinding="{Binding Id}" Title="Identity" IsVisible="{Binding ShowIdColumn}" />
+		<material:DataGridColumn ValueBinding="{Binding Name}" Title="Name" IsVisible="{Binding ShowNameColumn}" />
+		<material:DataGridColumn ValueBinding="{Binding Age}" Title="Age" IsVisible="{Binding ShowAgeColumn}" />
+	</material:DataGrid.Columns>
+</material:DataGrid>
+```
+
+## Factory Methods
+DataGrid provides factory methods for customizing the default appearance of cells and separators:
+
+- `LabelFactory`: Customize the default cell label appearance
+- `HorizontalLineFactory`: Customize the row separator appearance
+
+These can be set in code-behind:
+
+```csharp
+public partial class MyPage : ContentPage
+{
+	public MyPage()
+	{
+		InitializeComponent();
+		
+		myDataGrid.LabelFactory = (binding) => new Label 
+		{ 
+			TextColor = Colors.Blue,
+			FontAttributes = FontAttributes.Bold
+		};
+		
+		myDataGrid.HorizontalLineFactory = () => new BoxView 
+		{ 
+			Color = Colors.Gray,
+			HeightRequest = 1
+		};
+	}
+}
+```

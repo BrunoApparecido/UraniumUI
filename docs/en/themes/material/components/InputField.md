@@ -1,17 +1,12 @@
 # InputField
 InputField is an abstraction on MAUI Level for material inputs such as Entry, Editor, Picker, DatePicker, TimePicker, SearchBar, and more. It is a wrapper around the input controls and makes them in line with the material design guidelines.
 
-
 ## Existing Controls
 
 - [TextField](TextField.md)
 - [PickerField](PickerField.md)
 - [DatePickerField](DatePickerField.md)
 - [TimePickerField](TimePickerField.md)
-
-
-
-
 
 ## Creating a Custom Control
 There are two ways to use InputField for custom controls. You can inherit from InputField or you can use it as a wrapper around your control.
@@ -29,9 +24,7 @@ InputField can be used in XAML like any other control. You can pass an existing 
 
 ### Inherit from InputField
 
-To create a custom control, you need to inherit from the InputField class and override the `Content` property. Thar property is responsible for creating the control content and returning it. The following example shows how to create a custom control for the Entry control. 
-
-
+To create a custom control, you need to inherit from the InputField class and override the `Content` property. That property is responsible for creating the control content and returning it. The following example shows how to create a custom control for the Entry control. 
 
 ```csharp
 public class TimePickerField : InputField
@@ -42,17 +35,27 @@ public class TimePickerField : InputField
         Margin = 5,
     };
 
-    public override HasValue => !string.IsNullOrEmpty(Editor.Text);
+    public override bool HasValue => !string.IsNullOrEmpty(Editor.Text);
 
     // ...
     // Your custom code
 }
 ```
 
-`HasValue` property should be overriden. That property is responsible for determining if the control has a value or not. If the control has a value, the title will be moved up. If the control does not have a value, the title will be moved down when unfocused. The following example shows how to implement the `HasValue` property for the Editor control.
+`HasValue` property should be overriden. That property is responsible for determining if the control has a value or not. If the control has a value, the title will be moved up. If the control does not have a value, the title will be moved down when unfocused.
 
 ![MAUI Material Input](../../../../images/inputfield-demo-custom.gif)
 
+## Validation
+InputField implements `IValidatable` interface and provides built-in validation support. You can add validations to your input field and display validation messages.
+
+```csharp
+var inputField = new InputField();
+inputField.Validations.Add(new RequiredValidation { Message = "This field is required" });
+inputField.Validations.Add(new MinLengthValidation { MinLength = 3, Message = "Minimum length is 3" });
+```
+
+To display validation messages, call `DisplayValidation()` method. To reset validation state, call `ResetValidation()` method.
 
 ## Styling
 InputField has the following style classes that can be used to style the control:
@@ -78,6 +81,7 @@ InputField has the following style classes that can be used to style the control
     <Setter Property="Spacing" Value="8" />
     <!--...-->
 </Style>
+
 <Style TargetType="Path" Class="InputField.ValidationIcon">
     <Setter Property="Fill" Value="MediumVioletRed" />
     <Setter Property="Data" Value="M7 11V1H8V11H7ZM8 13V14.01H7V13H8Z" />
@@ -89,3 +93,20 @@ InputField has the following style classes that can be used to style the control
     <!--...-->
 </Style>
 ```
+
+## Properties
+- `Title`: The floating label text
+- `AccentColor`: The color used for focused state and validation
+- `TitleColor`: The color of the floating label
+- `BorderColor`: The color of the input border
+- `BorderThickness`: The thickness of the input border
+- `InputBackgroundColor`: The background color of the input
+- `InputBackground`: The background brush of the input
+- `Icon`: The icon to display at the start of the input
+- `CornerRadius`: The corner radius of the input border
+- `TitleFontSize`: The font size of the floating label
+- `FontAttributes`: The font attributes of the floating label
+- `FontFamily`: The font family of the floating label
+- `FontSize`: The font size of the input text
+- `FontAutoScalingEnabled`: Whether font auto scaling is enabled
+- `ContentAutomationId`: The automation ID for the content control

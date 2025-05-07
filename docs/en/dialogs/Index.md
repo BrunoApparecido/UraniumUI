@@ -62,47 +62,51 @@ UraniumUI has a default dialog implementation. You can use it without adding any
 
 
 ## Types
-There are 4 types of dialogs in UraniumUI package. They are: 
-- `CheckBox Prompt`
-- `RadioButton Prompt`
-- `Confirmation` 
-- `Text Prompt`
-- `Progress`
- 
-They are implemented as extension methods and `IDialogService` implementation. You can use them as extension method for any **Page** or you can use then view injecting `IDialogService` to your class.
+There are 6 types of dialogs in UraniumUI package. They are: 
+- `CheckBox Prompt` - For multiple selection
+- `RadioButton Prompt` - For single selection
+- `Confirmation` - For yes/no decisions
+- `Text Prompt` - For text input
+- `Progress` - For showing progress
+- `View` - For displaying custom views
+- `Form` - For displaying form-based dialogs
 
+## Usage Patterns
 
-**Extension Method**
+### Extension Methods
+The simplest way to use dialogs is through extension methods:
+
 ```csharp
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    private async void ShowDialog_Clicked(object sender, EventArgs e)
     {
-        InitializeComponent();
-    }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        var result = await this.DisplayCheckBoxPromptAsync("Title", new []{ "Option 1", "Option 2", "Option 3"});
+        var result = await this.DisplayCheckBoxPromptAsync(
+            "Select Options",
+            new[] { "Option 1", "Option 2", "Option 3" });
     }
 }
 ```
 
-**IDialogService**
+### Dependency Injection
+For better testability and maintainability, inject `IDialogService`:
 
 ```csharp
 public partial class MainPage : ContentPage
 {
-    public IDialogService DialogService { get; }
+    private readonly IDialogService _dialogService;
+
     public MainPage(IDialogService dialogService)
     {
         InitializeComponent();
-        DialogService = dialogService;
+        _dialogService = dialogService;
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void ShowDialog_Clicked(object sender, EventArgs e)
     {
-        var result = await DialogService.DisplayCheckBoxPromptAsync("Title", new []{ "Option 1", "Option 2", "Option 3"});
+        var result = await _dialogService.DisplayCheckBoxPromptAsync(
+            "Select Options",
+            new[] { "Option 1", "Option 2", "Option 3" });
     }
 }
 ```
@@ -299,7 +303,7 @@ You can handle the cancellation of the progress dialog by checking the `IsCancel
             // Indicate a long running operation
             await Task.Delay(5000);
         }
-    ```
+    }
 
 - You can handle at the end of the operation by checking the `IsCancellationRequested` property of the `CancellationToken`.
     ```csharp
@@ -324,7 +328,7 @@ You can handle the cancellation of the progress dialog by checking the `IsCancel
             // Handle completion
             Console.WriteLine("Progress dialog completed");
         }
-    ```
+    }
 
 - You can even cancel the long running Task operation when user cancels the operation:
     ```csharp
@@ -346,4 +350,118 @@ You can handle the cancellation of the progress dialog by checking the `IsCancel
                 Console.WriteLine("Progress dialog cancelled");
             }
         }
+    }
     ```
+
+## Customization
+UraniumUI dialogs can be customized in several ways:
+
+### Dialog Options
+You can customize the appearance and behavior of dialogs by configuring `DialogOptions`:
+
+```csharp
+builder.Services.Configure<DialogOptions>(options =>
+{
+    // Custom backdrop color
+    options.GetBackdropColor = () => Colors.Black.WithAlpha(0.7f);
+    
+    // Custom header
+    options.GetHeader = (title) => new Label 
+    { 
+        Text = title,
+        FontSize = 24,
+        Margin = new Thickness(20)
+    };
+    
+    // Custom footer
+    options.GetFooter = (buttons) => new StackLayout
+    {
+        Orientation = StackOrientation.Horizontal,
+        Children = buttons.Select(b => new Button 
+        { 
+            Text = b.Key,
+            Command = b.Value 
+        }).ToList()
+    };
+    
+    // Custom divider
+    options.GetDivider = () => new BoxView 
+    { 
+        HeightRequest = 2,
+        Color = Colors.Gray 
+    };
+    
+    // Custom effects
+    options.Effects = new List<Func<Effect>>
+    {
+        () => new ShadowEffect(),
+        () => new RippleEffect()
+    };
+});
+```
+
+### Styling
+Dialogs support Material Design styling through style classes:
+
+- `SurfaceContainer` - Applies surface container styling
+- `Rounded` - Applies rounded corners
+- `Divider` - Styles the divider
+- `Dialog.Button0` - Styles the first button
+- `Dialog.Button1` - Styles the second button
+- `TextButton` - Applies text button styling
+
+You can override these styles in your application's resources:
+
+```xaml
+<ResourceDictionary>
+    <Style TargetType="Button" Class="Dialog.Button0">
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+    
+    <Style TargetType="Button" Class="Dialog.Button1">
+        <Setter Property="TextColor" Value="{StaticResource Error}" />
+    </Style>
+</ResourceDictionary>
+```
+
+---
+
+## Service Registration
+UraniumUI provides different ways to register and use dialog services:
+
+### Default Implementation
+The default implementation uses MAUI's built-in navigation system. No additional registration is required:
+
+```csharp
+builder.Services.AddUraniumUI();
+```
+
+### Mopups Implementation
+To use Mopups as the dialog implementation:
+
+```csharp
+builder.Services.AddUraniumUI();
+builder.Services.AddMopupsDialogs();
+```
+
+### Community Toolkit Implementation
+To use Community Toolkit as the dialog implementation:
+
+```csharp
+builder.Services.AddUraniumUI();
+builder.Services.AddCommunityToolkitDialogs();
+```
+
+### Custom Dialog Service
+You can create a custom dialog service by implementing `IDialogService`:
+
+```csharp
+public class CustomDialogService : IDialogService
+{
+    // Implement interface methods
+}
+
+// Register in DI container
+builder.Services.AddSingleton<IDialogService, CustomDialogService>();
+```

@@ -21,6 +21,43 @@ Then you can use it like this:
 | --- | --- |
 | ![MAUI Material Design TextField](../../../../images/textfield-demo-light-android.gif) | ![MAUI Material Design TextField](../../../../images/textfield-demo-dark-windows.gif) |
 
+## Properties
+
+### Text Input Properties
+- `Text` - Gets or sets the text value of the TextField
+- `TextColor` - Gets or sets the color of the text
+- `Keyboard` - Gets or sets the keyboard type (e.g., Default, Numeric, Email)
+- `IsPassword` - Gets or sets whether the TextField should mask its text
+- `MaxLength` - Gets or sets the maximum length of text allowed
+- `IsTextPredictionEnabled` - Gets or sets whether text prediction is enabled
+- `CharacterSpacing` - Gets or sets the spacing between characters
+- `HorizontalTextAlignment` - Gets or sets the horizontal alignment of the text
+
+### Behavior Properties
+- `AllowClear` - Gets or sets whether a clear button is shown to clear the text
+- `DisallowClearButtonFocus` - Gets or sets whether the clear button can receive focus
+- `SelectAllTextOnFocus` - Gets or sets whether all text should be selected when the field receives focus
+- `IsReadOnly` - Gets or sets whether the TextField is read-only
+- `ReturnType` - Gets or sets the return key type
+- `ReturnCommand` - Gets or sets the command to execute when the return key is pressed
+- `ReturnCommandParameter` - Gets or sets the parameter for the return command
+
+### Selection Properties
+- `SelectionLength` - Gets or sets the length of the selected text
+- `CursorPosition` - Gets or sets the position of the cursor
+- `SelectionHighlightColor` - Gets or sets the color of the text selection highlight
+
+## Events
+
+- `TextChanged` - Occurs when the text value changes
+- `Completed` - Occurs when the user completes the text input (e.g., presses return)
+
+## Methods
+
+- `ClearValue()` - Clears the text value of the TextField
+- `SelectAllText()` - Selects all text in the TextField
+- `DisplayValidation()` - Displays validation results
+- `ResetValidation()` - Resets the validation state and clears the text
 
 ## Icon
 TextFields support setting an icon on the left side of the control. You can set the icon by setting the `Icon` property. The icon can be any `ImageSource` object. FontImageSource is recommended as Icon since its color can be changed when focused.
@@ -44,7 +81,6 @@ The color that is used to fill border and icon of control when it's focused. You
     Icon="{FontImageSource FontFamily=MaterialRegular, Glyph={x:Static m:MaterialRegular.Edit}}"
     AccentColor="DeepSkyBlue"/>
 ```
-
 
 ![MAUI AccentColor InputField](../../../../images/editorfield-accentcolor-android-dark.gif)
 
@@ -75,7 +111,7 @@ Attachments are additional controls that can be placed inside the control. They 
 ![maui-uraniumui-textfield-attachments](../../../../images/textfield-attachments-button.png)
 
 ### Password Show/Hide
-You can use pre-defined `TextFieldPasswordShowHideAttachment` to create a password show/hide button. It is a button that toggles the `IsPassword` property of the control.
+The `TextFieldPasswordShowHideAttachment` provides a toggle button to show/hide password text. It automatically updates its icon based on the password visibility state.
 
 ```xml
 <material:TextField Title="Password" IsPassword="True">
@@ -85,18 +121,30 @@ You can use pre-defined `TextFieldPasswordShowHideAttachment` to create a passwo
 </material:TextField>
 ```
 
+The attachment automatically:
+- Toggles between show/hide icons
+- Updates the TextField's `IsPassword` property
+- Maintains proper styling and layout
+
 ![maui-uraniumui-textfield-attachments](../../../../images/textfield-attachments-passwordshowhide.gif)
 
 ## Validation
+It implements [InputKit Validations](https://enisn-projects.io/docs/en/inputkit/latest/components/
+controls/FormView#validations) feature and supports validation through the `Validations` property. Validations can be added in two ways:
 
-Validation logic is exactly same with [InputKit Validations](https://enisn-projects.io/docs/en/inputkit/latest/components/controls/FormView#validations).
-
-You can define validations by using `Validations` property. It is a collection of `Validation` objects. Each `Validation` object has a `Message` property that is a string and will be displayed when the validation fails.
-
-UraniumUI provides an easier way than InputKit and allows defining validations without using `Validations` property. Validations can be placed inside `TextField` tags.
-
+1. Using the `Validations` property:
 ```xml
-<material:TextField Title="E-mail" Icon="{FontImageSource FontFamily=MaterialRegular, Glyph={x:Static m:MaterialRegular.Email}}">
+<material:TextField Title="Email">
+    <material:TextField.Validations>
+        <validation:RequiredValidation />
+        <validation:RegexValidation Pattern="{x:Static input:AdvancedEntry.REGEX_EMAIL}" Message="Invalid email address" />
+    </material:TextField.Validations>
+</material:TextField>
+```
+
+2. Directly as child elements:
+```xml
+<material:TextField Title="Email">
     <validation:RequiredValidation />
     <validation:RegexValidation Pattern="{x:Static input:AdvancedEntry.REGEX_EMAIL}" Message="Invalid email address" />
 </material:TextField>
@@ -145,9 +193,8 @@ TextField is fully compatible with [FormView](https://enisn-projects.io/docs/en/
 | --- | --- |
 | ![MAUI Material Input](../../../../images/textfield-formview-light-android.gif) | ![MAUI Material Input](../../../../images/textfield-formview-dark-windows.gif) |
 
-
 ## Styling
-TextField has the following style classes that can be used to style the control:
+TextField supports several style classes that can be used to customize its appearance:
 
 ```xml
 <Style TargetType="Label" Class="InputField.Title">
@@ -187,3 +234,12 @@ TextField has the following style classes that can be used to style the control:
     <!--...-->
 </Style>
 ```
+
+Each style class can be customized to match your application's theme:
+- `InputField.Title` - Styles the floating label
+- `InputField.Border` - Styles the border container
+- `InputField.Icon` - Styles the icon (if present)
+- `InputField.Attachments` - Styles the attachments container
+- `InputField.ValidationIcon` - Styles the validation error icon
+- `InputField.ValidationLabel` - Styles the validation error message
+- `TextField.ClearIcon` - Styles the clear button icon
