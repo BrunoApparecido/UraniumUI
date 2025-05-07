@@ -108,7 +108,7 @@ public partial class MainPage : ContentPage
 ```
 
 > [!IMPORTANT]
-> Injecting `IDialogService` is highly recommended. It'll make your code more testable and makes dialogs libray easily swappable.
+> Injecting `IDialogService` is highly recommended. It'll make your code more testable and make the dialogs library easily swappable.
 
 ---
 
