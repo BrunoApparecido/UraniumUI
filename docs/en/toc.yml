@@ -10,6 +10,8 @@
       href: infrastructure/GridLayout.md
     - name: Auto Form View
       href: infrastructure/AutoFormView.md
+    - name: Dynamic Content View
+      href: infrastructure/DynamicContentView.md
     - name: Dropdown
       href: infrastructure/Dropdown.md
     - name: ExpanderView
